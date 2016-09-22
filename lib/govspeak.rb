@@ -201,7 +201,7 @@ module Govspeak
       ERB.new(content).result(binding)
     end
 
-    extension('specialist publisher image attachment inline', /!\[InlineAttachment:(.+)\]/) do |attribute, body|
+    extension('specialist publisher image attachment inline', /!\[InlineAttachment:(.+?)\]/) do |attribute, body|
       sanitised_attribute = specialist_publisher_sanitised_filename(attribute)
       attachment = attachments.detect do |a|
         sanitised_match = specialist_publisher_sanitised_filename(a[:url])
@@ -215,7 +215,7 @@ module Govspeak
       end
     end
 
-    extension('specialist publisher attachment inline', /\[InlineAttachment:(.+)\]/) do |attribute, body|
+    extension('specialist publisher attachment inline', /\[InlineAttachment:(.+?)\]/) do |attribute, body|
       sanitised_attribute = specialist_publisher_sanitised_filename(attribute)
       attachment = attachments.detect do |a|
         sanitised_match = specialist_publisher_sanitised_filename(a[:url] || a[:content_id])
