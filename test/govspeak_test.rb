@@ -929,6 +929,29 @@ Or so we thought.}
     assert_match(/<img src="#{quoted_url}" alt="#{quoted_title}">/, rendered)
   end
 
+  test "two specialist publisher image inline attachments on the same line" do
+    govspeak = "![InlineAttachment:test document.jpg] and ![InlineAttachment:another.jpg]"
+    attachments = [
+      {
+        url: "http://www.example.com/attachments/test-document.jpg",
+        content_id: SecureRandom.uuid,
+        title: "Test Image",
+      },
+      {
+        url: "http://www.example.com/attachments/another.jpg",
+        content_id: SecureRandom.uuid,
+        title: "Another",
+      }
+    ]
+    rendered = Govspeak::Document.new(govspeak, {attachments: attachments}).to_html
+    quoted_title = Regexp.quote(attachments[0][:title])
+    quoted_url = Regexp.quote(attachments[0][:url])
+    assert_match(/<img src="#{quoted_url}" alt="#{quoted_title}">/, rendered)
+    quoted_title = Regexp.quote(attachments[1][:title])
+    quoted_url = Regexp.quote(attachments[1][:url])
+    assert_match(/<img src="#{quoted_url}" alt="#{quoted_title}">/, rendered)
+  end
+
   test "specialist publisher image inline attachment with content_id match" do
     content_id = SecureRandom.uuid
     govspeak = "![InlineAttachment:#{content_id}]"
@@ -957,6 +980,29 @@ Or so we thought.}
     rendered = Govspeak::Document.new(govspeak, {attachments: [attachment]}).to_html
     quoted_title = Regexp.quote(attachment[:title])
     quoted_url = Regexp.quote(attachment[:url])
+    assert_match(/<a href="#{quoted_url}">#{quoted_title}<\/a>/, rendered)
+  end
+
+  test "two specialist publisher inline attachments in the same line" do
+    govspeak = "[InlineAttachment:test document.pdf] and [InlineAttachment:another.pdf]"
+    attachments = [
+      {
+        url: "http://www.example.com/attachments/test-document.pdf",
+        content_id: SecureRandom.uuid,
+        title: "Test Document",
+      },
+      {
+        url: "http://www.example.com/attachments/another.pdf",
+        content_id: SecureRandom.uuid,
+        title: "Another",
+      }
+    ]
+    rendered = Govspeak::Document.new(govspeak, {attachments: attachments}).to_html
+    quoted_title = Regexp.quote(attachments[0][:title])
+    quoted_url = Regexp.quote(attachments[0][:url])
+    assert_match(/<a href="#{quoted_url}">#{quoted_title}<\/a>/, rendered)
+    quoted_title = Regexp.quote(attachments[1][:title])
+    quoted_url = Regexp.quote(attachments[1][:url])
     assert_match(/<a href="#{quoted_url}">#{quoted_title}<\/a>/, rendered)
   end
 
