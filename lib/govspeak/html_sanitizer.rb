@@ -48,13 +48,13 @@ class Govspeak::HtmlSanitizer
     if @allowed_image_hosts && @allowed_image_hosts.any?
       transformers << ImageSourceWhitelister.new(@allowed_image_hosts)
     end
-    Sanitize.clean(@dirty_html, sanitize_config.merge(transformers: transformers))
+    Sanitize.fragment(@dirty_html, sanitize_config.merge(transformers: transformers))
   end
 
   def sanitize_without_images
     config = sanitize_config
     config[:elements].delete('img')
-    Sanitize.clean(@dirty_html, config)
+    Sanitize.fragment(@dirty_html, config)
   end
 
   def sanitize_config
